@@ -206,12 +206,17 @@ class BindPIDException(Exception):
     pass
 
 
-def _validate(argdict):
+def _validate(argdict, ignore_values=()):
     """Validate the argument dictionary ``argdict`` passed to ``bind_pid``."""
     for param in REQ_PARAMS:
+        if param in ignore_values:
+            continue
         val = argdict.get(param)
         if not val:
             raise BindPIDException("A value for parameter {} is required".format(param))
+    # In cases we haven't the entity type we are looking for, return early.
+    if "entity_type" in ignore_values:
+        return
     entity_type = argdict["entity_type"]
     et_validation = ENTITY_TYPES.get(entity_type)
     if not et_validation:

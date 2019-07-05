@@ -224,7 +224,9 @@ def main(job, sip_uuid, shared_path, bind_pids_switch):
         handle_config.get("pid_request_verify_certs", "True")
     )
     try:
-        _validate(handle_config)
+        # We know entity_type and desired_pid isn't provided until later, we
+        # can't validate without ignoring it here.
+        _validate(handle_config, ignore_values=("entity_type", "desired_pid"))
     except BindPIDException as err:
         logger.info(err)
         raise BindPIDsException
