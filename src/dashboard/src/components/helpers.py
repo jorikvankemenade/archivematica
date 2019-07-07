@@ -314,15 +314,12 @@ def stream_mets_from_storage_service(
     mets_path = "{}/data/{}".format(absolute_transfer_name, mets_name)
     mets_tmp_dir = tempfile.mkdtemp()
     mets_tmp_file = os.path.join(mets_tmp_dir, mets_name)
-    ss_api_user = get_setting("storage_service_user", "test")
-    ss_api_key = get_setting("storage_service_apikey", None)
-    ss_url = get_setting("storage_service_url", None)
     # We can't get a lot of debug information from AMClient yet, so we try to
     # download and then open, returning an error if the file can't be accessed.
     AMClient(
-        ss_api_key=ss_api_key,
-        ss_user_name=ss_api_user,
-        ss_url=ss_url.rstrip("/"),
+        ss_api_key=get_setting("storage_service_apikey", None),
+        ss_user_name=get_setting("storage_service_user", "test"),
+        ss_url=get_setting("storage_service_url", None).rstrip("/"),
         package_uuid=sip_uuid,
         relative_path=mets_path,
         saveas_filename=mets_tmp_file,

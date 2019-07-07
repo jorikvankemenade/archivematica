@@ -348,7 +348,7 @@ def aip_file_download(request, uuid):
 def aip_mets_file_download(request, uuid):
     """Download an individual AIP METS file."""
     es_client = elasticSearchFunctions.get_client()
-    aip = elasticSearchFunctions.get_aip_data(es_client, uuid, fields="uuid,name")
+    aip = elasticSearchFunctions.get_aip_data(es_client, uuid, fields="name")
     transfer_name = aip["_source"]["name"]
     return helpers.stream_mets_from_storage_service(
         transfer_name=transfer_name, sip_uuid=uuid
