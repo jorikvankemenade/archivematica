@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from components import helpers
 from fpr.forms import FPRuleForm, IDToolForm
 from fpr.models import (
     Format,
@@ -33,6 +34,7 @@ class TestViews(TestCase):
     def setUp(self):
         user = User.objects.create_superuser("demo", "demo@example.com", "demo")
         self.client.login(username=user.username, password="demo")
+        helpers.set_setting("dashboard_uuid", "test-uuid")
 
     def test_idcommand_create(self):
         url = reverse("idcommand_create")
