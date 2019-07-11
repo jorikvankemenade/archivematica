@@ -189,9 +189,8 @@ def storage(request):
         messages.warning(
             request,
             _(
-                "Error retrieving locations: is the "
-                "storage server running? Please contact "
-                "an administrator."
+                "Error retrieving locations: is the storage server running? "
+                "Please contact an administrator."
             ),
         )
         return render(request, "administration/locations.html")
