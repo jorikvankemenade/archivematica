@@ -8,8 +8,8 @@ from components import helpers
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-class TestAdministrationStorage(TestCase):
-    fixtures = [os.path.join(THIS_DIR, "fixtures", "test_user.json")]
+class TestStorage(TestCase):
+    fixtures = [os.path.join(THIS_DIR, "../../../../tests/fixtures", "test_user.json")]
 
     def setUp(self):
         self.client.login(username="test", password="test")
