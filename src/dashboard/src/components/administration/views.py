@@ -240,13 +240,15 @@ def usage(request):
     """Return page summarizing storage usage.
 
     To avoid timeouts on the first load of this page, the usage data is only
-    calculated when the `calculate` get parameter is evaluated as `True`. When
-    the usage data is not calculated, the page shows a description and a button
-    to reload the page calculating the usage. When the usage is calculated, the
-    page will display a general information section and a table of clearable
-    directories from within the shared path.
+    calculated when the `calculate` get parameter is evaluated as `True` (true
+    values are "true", "yes", "on" and "1", case insensitive). When the usage data
+    is not calculated, the page shows a description and a button to reload the page
+    calculating the usage. When the usage is calculated, the page will display a
+    general information section and a table of clearable directories from within
+    the shared path.
     """
-    calculate_usage = request.GET.get("calculate", False)
+    calculate = request.GET.get("calculate", "")
+    calculate_usage = calculate.lower() in ["true", "yes", "on", "1"]
     if calculate_usage:
         root_path = _get_mount_point_path(django_settings.SHARED_DIRECTORY)
         root = {

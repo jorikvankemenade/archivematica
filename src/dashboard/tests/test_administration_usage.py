@@ -17,10 +17,16 @@ class TestAdministrationUsage(TestCase):
         helpers.set_setting("dashboard_uuid", "test-uuid")
 
     def test_no_calculation(self):
-        response = self.client.get("/administration/usage/")
-        self.assertFalse(response.context["calculate_usage"])
-        self.assertIn('<a href="?calculate=true"', response.content)
-        self.assertIn("Calculate disk usage", response.content)
+        for calculate in [None, "False", "false", "no", "0", "random"]:
+            if calculate is None:
+                response = self.client.get("/administration/usage/")
+            else:
+                response = self.client.get(
+                    "/administration/usage/?calculate=%s" % calculate
+                )
+            self.assertFalse(response.context["calculate_usage"])
+            self.assertIn('<a href="?calculate=true"', response.content)
+            self.assertIn("Calculate disk usage", response.content)
 
     @mock.patch(
         "components.administration.views._usage_get_directory_used_bytes",
@@ -34,8 +40,14 @@ class TestAdministrationUsage(TestCase):
         "components.administration.views._get_mount_point_path", return_value="/"
     )
     def test_calculation(self, mock_mount_path, mock_dir_size, mock_dir_used):
-        response = self.client.get("/administration/usage/?calculate=true")
-        self.assertTrue(response.context["calculate_usage"])
-        mock_mount_path.assert_called_once_with(settings.SHARED_DIRECTORY)
-        mock_dir_size.assert_called_once_with("/")
-        self.assertEqual(mock_dir_used.call_count, 9)
+        for calculate in ["true", "True", "ON", "yes", "1"]:
+            response = self.client.get(
+                "/administration/usage/?calculate=%s" % calculate
+            )
+            self.assertTrue(response.context["calculate_usage"])
+
+        mock_mount_path.assert_called_with(settings.SHARED_DIRECTORY)
+        mock_dir_size.assert_called_with("/")
+        self.assertEqual(mock_mount_path.call_count, 5)
+        self.assertEqual(mock_dir_size.call_count, 5)
+        self.assertEqual(mock_dir_used.call_count, 45)
