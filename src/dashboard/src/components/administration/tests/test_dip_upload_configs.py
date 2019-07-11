@@ -8,10 +8,10 @@ from components.administration.views_dip_upload import _AS_DICTNAME, _ATOM_DICTN
 from main.models import DashboardSetting
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-FIXTURES_DIR = os.path.abspath(os.path.join(THIS_DIR, "fixtures"))
+FIXTURES_DIR = os.path.abspath(os.path.join(THIS_DIR, "../../../../tests/fixtures"))
 
 
-class TestAdministrationUploadDipAsConfigView(TestCase):
+class TestDipUploadAsConfig(TestCase):
     fixture_files = ["test_user.json"]
     fixtures = [os.path.join(FIXTURES_DIR, p) for p in fixture_files]
 
@@ -80,7 +80,7 @@ class TestAdministrationUploadDipAsConfigView(TestCase):
         self.assertIsInstance(config, dict)
 
 
-class TestUploadDipAtoMConfigView(TestCase):
+class TestDipUploadAtomConfig(TestCase):
     fixture_files = ["test_user.json"]
     fixtures = [os.path.join(FIXTURES_DIR, p) for p in fixture_files]
 
